@@ -34,7 +34,7 @@ def getOneCat(id):
     return Cats.query.filter_by(id=id).all()
 
 def addCatPosition(date_add, date_change, cost, cats_id):
-    cat = CatsPosition(date_add=date_add, date_change=date_change, cost=cost, cats_id=cats_ida)
+    cat = CatsPosition(date_add=date_add, date_change=date_change, cost=cost, cats_id=cats_id)
     db.session.add(cat)
     db.session.commit()
 
