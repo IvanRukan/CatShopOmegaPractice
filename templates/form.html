@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ browser_title }}</title>
+</head>
+<body>
+    <div>
+        <form method="POST">
+            {{ form.csrf_token }}
+            {{ form.email.label }}
+            {{ form.email() }}
+            {{ form.name.label }}
+            {{ form.name() }}
+            {{ form.password.label }}
+            {{ form.password() }}
+            <input type="submit" value="Отправить">
+            </form>
+    </div>
+</body>
+</html>
