@@ -27,7 +27,7 @@ def load_user(user_id):
 def main_page():
     try:
         if current_user._get_current_object().role == 'user':    # разные функции в зависимости от роли
-            return render_template('main.html', u=True, cats=[])
+            return render_template('main.html', u=True, cats=[], auth=True)
         elif current_user._get_current_object().role == 'admin':
             return 'вошли в роль админа'
     except AttributeError:

@@ -1,7 +1,7 @@
 from main import db
 
 
-class Cats(gitdb.Model):
+class Cats(db.Model):
     __tablename__ = 'cats'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
