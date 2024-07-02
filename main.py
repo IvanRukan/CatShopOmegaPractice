@@ -1,4 +1,6 @@
 from flask import Flask, render_template, redirect, request
+from flask_sqlalchemy import SQLAlchemy
+
 from forms import Form
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
@@ -8,6 +10,8 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shop_db.db'
+db = SQLAlchemy(app)
 csrf = CSRFProtect()
 csrf.init_app(app)
 login_manager = LoginManager()
