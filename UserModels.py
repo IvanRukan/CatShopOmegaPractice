@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from main import db
 # описывать таблицы пользователей в бд будем здесь же
 temporary_storage = {}  # будет бд, это временная симуляция сохранения в словарь
 
@@ -49,6 +50,30 @@ def input_check(form):
         return found_user
     return "Неверное имя пользователя или пароль!"
 
+class UserModel(db.model):
+    __tablename__ = 'users'
+    id = db.Column(db.String(80), primary_key=True)
+    email = db.Column(db.String(80), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    role = db.Column(db.String(80), nullable=False)
+
+class AdminModel(db.model):
+    __tablename__ = 'admins'
+    id = db.Column(db.String(80), primary_key=True)
+    email = db.Column(db.String(80), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    role = db.Column(db.String(80), nullable=False)
 
 
+db.create_all()
 
+def getAdmin(id):
+    return AdminModel.query.all()
+def addUser(id, email, name, password, role):
+    user = UserModel(id=id, email=email, name=name, password=password, role=role)
+    db.session.add(user)
+    db.session.commit()
+def getUser(id):
+    return UserModel.query.filter_by(id=id).all()
