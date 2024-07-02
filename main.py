@@ -23,11 +23,11 @@ def load_user(user_id):
 def main_page():
     try:
         if current_user._get_current_object().role == 'user':    # разные функции в зависимости от роли
-            return 'Вошли в роль пользователя'
+            return render_template('main.html', u=True, cats=[])
         elif current_user._get_current_object().role == 'admin':
             return 'вошли в роль админа'
     except AttributeError:
-        return "Just the beginning"
+        return render_template('main.html', u=False, cats=[])
 
 
 @app.route('/register', methods=["GET", "POST"])

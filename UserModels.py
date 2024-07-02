@@ -42,10 +42,12 @@ def get_user_from_storage(form):
 def input_check(form):
     email = form.data['email']
     user_id = str(hash(email))
-    found_user = temporary_storage.get(user_id)  # получение из бд
+    found_user = temporary_storage.get(user_id)
+    if found_user is None:
+        return None
     if check_password_hash(found_user.password, form.data['password']) and form.data['name'] == found_user.name:
         return found_user
-    return None
+    return "Неверное имя пользователя или пароль!"
 
 
 
