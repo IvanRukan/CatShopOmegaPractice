@@ -12,6 +12,9 @@
             {% if u %}
                 <a href="/add">Создать</a>
             {% endif %}
+            {% if auth %}
+                <a href="/logout">Выйти</a>
+            {% endif %}
         </div>
        </nav>
         {% for cat in cats %}
