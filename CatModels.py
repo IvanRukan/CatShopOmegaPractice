@@ -9,6 +9,7 @@ class Cats(db.Model):
     gender = db.Column(db.String(80), nullable=False)
     color = db.Column(db.String(80), nullable=False)
     age = db.Column(db.Integer, nullable=False)
+    dl = db.relationship('CatsPosition', backref='cats', uselist=False)
 
 
 class CatsPosition(db.Model):
