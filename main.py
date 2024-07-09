@@ -1,25 +1,26 @@
 from flask import Flask, render_template, redirect, request
-from flask_sqlalchemy import SQLAlchemy
 from forms import Form
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
-from UserModels import create_and_save_user, get_user_from_storage, input_check, temporary_storage
+from UserModels import create_and_save_user, get_user_from_storage, input_check,db
 import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shop_db.db'
-db = SQLAlchemy(app)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+with app.app_context():
+    db.init_app(app)
+    db.create_all()
 csrf = CSRFProtect()
 csrf.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 db.create_all()
 
-
 @login_manager.user_loader
 def load_user(user_id):
-    return temporary_storage.get(user_id)  # импорт функции обращения к бд
+    return get_user_from_storage(user_id)
 
 
 @app.route('/', methods=["GET"])
@@ -43,9 +44,9 @@ def register_page():
             user = get_user_from_storage(form)
             if user is None:
                 new_user = create_and_save_user(form)
-                print("New user created" + new_user.name)
+                print("New user created " + new_user.name)
             else:
-                print("User already exists" + user.name)
+                print("User already exists " + user.name)
         return redirect('/')
 
 
