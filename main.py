@@ -3,7 +3,7 @@ from forms import Form, CatAdd
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from UserModels import create_and_save_user, get_user_from_storage, input_check, db, get_user
-from CatModels import add_cat, add_cat_position, get_all_cats
+from CatModels import add_cat, add_cat_position, get_all_cats, get_one_cat, get_one_cat_position
 from datetime import datetime
 import os
 app = Flask(__name__)
@@ -19,6 +19,7 @@ with app.app_context():
     csrf.init_app(app)
     login_manager = LoginManager()
     login_manager.init_app(app)
+    cats = get_all_cats()
 
 
 @login_manager.user_loader
@@ -28,13 +29,15 @@ def load_user(user_id):
 
 @app.route('/', methods=["GET"])
 def main_page():
+    # Cats.__table__.drop(db.engine)
+    # CatsPosition.__table__.drop(db.engine)
     try:
         if get_user_role() == 'user':
-            return render_template('main.html', cats=[], auth=True)
+            return render_template('main.html', cats=cats, auth=True)
         elif get_user_role() == 'admin':
-            return render_template('main.html', u=True, cats=[], auth=True)
+            return render_template('main.html', u=True, cats=cats, auth=True)
     except AttributeError:
-        return render_template('main.html', u=False, cats=[])
+        return render_template('main.html', u=False, cats=cats)
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -97,6 +100,11 @@ def add_page():
 
 def get_user_role():
     return current_user._get_current_object().role
+
+
+@app.route('/<int:id_cat>')
+def cat_view(id_cat):
+    return render_template('catPage.html', cat=get_one_cat(id_cat), cat_pos=get_one_cat_position(id_cat))
 
 
 if __name__ == "__main__":

@@ -19,11 +19,13 @@
         </div>
        </nav>
         {% for cat in cats %}
+            <a href="{{ cat.id }} ">
             <div>{{ cat.name }}</div>
             <div>{{ cat.breed }}</div>
             <div>{{ cat.gender }}</div>
             <div>{{ cat.color }}</div>
             <div>{{ cat.age }}</div>
+            </a>
         {% endfor %}
     </div>
 </body>
