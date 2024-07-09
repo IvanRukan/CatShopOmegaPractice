@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField, StringField, PasswordField
+from wtforms import EmailField, StringField, PasswordField, RadioField, IntegerField
 from wtforms.validators import DataRequired
 
 
@@ -9,9 +9,10 @@ class Form(FlaskForm):
     password = PasswordField('Введите пароль:', validators=[DataRequired()])
 
 
-# def extract_data(form):
-#     if form.validate_on_submit():
-#         email = form.data['email']
-#         name = form.data['name']
-#         password = form.data['password']
-#         print(email, name, password)
+class CatAdd(FlaskForm):
+    name = StringField('Введите имя кота:', validators=[DataRequired()])
+    breed = StringField('Введите породу кота:', validators=[DataRequired()])
+    gender = RadioField('Выберите пол кота:', choices=[('м', 'Мужской'), ('ж', 'Женский')], validators=[DataRequired()])
+    color = StringField('Введите цвет кота:', validators=[DataRequired()])
+    age = IntegerField('Введите возраст кота:', validators=[DataRequired()])
+    cost = IntegerField('Введите цену кота:', validators=[DataRequired()])

@@ -1,4 +1,4 @@
-from main import db
+from UserModels import db
 
 
 class Cats(db.Model):
@@ -9,16 +9,15 @@ class Cats(db.Model):
     gender = db.Column(db.String(80), nullable=False)
     color = db.Column(db.String(80), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    dl = db.relationship('CatsPosition', backref='cats', uselist=False)
+    cats_position = db.relationship('CatsPosition', backref='cats', cascade='all, delete-orphan', lazy='dynamic')
 
 
 class CatsPosition(db.Model):
     __tablename__ = 'catsPosition'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    date_add = db.Column(db.Date, nullable=False)
-    date_change = db.Column(db.Date, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     cost = db.Column(db.Integer, nullable=False)
-    cats_id = db.column(db.Integer, db.ForeignKey('cats.id'))
+    cats_id = db.Column(db.Integer, db.ForeignKey('cats.id'), nullable=False)
 
 
 def add_cat(name, breed, gender, color, age):
@@ -35,8 +34,8 @@ def get_one_cat(id):
     return Cats.query.filter_by(id=id).all()
 
 
-def add_cat_position(date_add, date_change, cost, cats_id):
-    cat = CatsPosition(date_add=date_add, date_change=date_change, cost=cost, cats_id=cats_id)
+def add_cat_position(date, cost, cats_id):
+    cat = CatsPosition(date=date, cost=cost, cats_id=cats_id)
     db.session.add(cat)
     db.session.commit()
 
