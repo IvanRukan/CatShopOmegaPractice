@@ -2,34 +2,35 @@ from flask import Flask, render_template, redirect, request
 from forms import Form
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
-from UserModels import create_and_save_user, get_user_from_storage, input_check,db
+from UserModels import create_and_save_user, get_user_from_storage, input_check, db, get_user, create_admin
 import os
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shop_db.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
 with app.app_context():
     db.init_app(app)
     db.create_all()
-csrf = CSRFProtect()
-csrf.init_app(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
-db.create_all()
+    csrf = CSRFProtect()
+    csrf.init_app(app)
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
 
 @login_manager.user_loader
 def load_user(user_id):
-    return get_user_from_storage(user_id)
+    return get_user(user_id)
 
 
 @app.route('/', methods=["GET"])
 def main_page():
     try:
         if current_user._get_current_object().role == 'user':    # разные функции в зависимости от роли
-            return render_template('main.html', u=True, cats=[], auth=True)
+            return render_template('main.html', cats=[], auth=True)
         elif current_user._get_current_object().role == 'admin':
-            return 'вошли в роль админа'
+            return render_template('main.html', u=True, cats=[], auth=True)
     except AttributeError:
         return render_template('main.html', u=False, cats=[])
 
