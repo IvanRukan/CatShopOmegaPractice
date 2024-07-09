@@ -1,7 +1,6 @@
 import hashlib
 
 from flask_login import UserMixin
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # описывать таблицы пользователей в бд будем здесь же
@@ -46,13 +45,18 @@ def get_user_from_storage(form):
 
 def input_check(form):
     email = form.data['email']
+
     user_id = str(numericvalue_from_string(email))[0:17]
     #found_user = temporary_storage.get(user_id)  # получение из бд
     found_user = get_user(user_id)
     print(found_user.password)
+
+    
+
     if check_password_hash(found_user.password, form.data['password']) and form.data['name'] == found_user.name:
         return found_user
-    return None
+    return "Неверное имя пользователя или пароль!"
+
 
 db = SQLAlchemy()
 class UserModel(db.Model):
@@ -62,6 +66,7 @@ class UserModel(db.Model):
     name = db.Column(db.String(80), nullable=False)
     password = db.Column(db.String(80), nullable=False)
     role = db.Column(db.String(80), nullable=False)
+
 
 
 class AdminModel(db.Model):
@@ -74,8 +79,7 @@ class AdminModel(db.Model):
 
 
 
-
-def get_admin(id):
+def get_admin():
     return AdminModel.query.all()
 
 
@@ -98,3 +102,4 @@ def numericvalue_from_string(s):
     h.update(s.encode())
     hx = h.hexdigest()
     return int(hx, base=16)
+

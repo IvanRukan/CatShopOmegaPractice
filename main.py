@@ -16,6 +16,7 @@ csrf = CSRFProtect()
 csrf.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+db.create_all()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -26,11 +27,11 @@ def load_user(user_id):
 def main_page():
     try:
         if current_user._get_current_object().role == 'user':    # разные функции в зависимости от роли
-            return 'Вошли в роль пользователя'
+            return render_template('main.html', u=True, cats=[], auth=True)
         elif current_user._get_current_object().role == 'admin':
             return 'вошли в роль админа'
     except AttributeError:
-        return "Just the beginning"
+        return render_template('main.html', u=False, cats=[])
 
 
 @app.route('/register', methods=["GET", "POST"])

@@ -21,25 +21,29 @@ class CatsPosition(db.Model):
     cats_id = db.column(db.Integer, db.ForeignKey('cats.id'))
 
 
-db.create_all()
-
-
-def addCat(name, breed, gender, color, age):
+def add_cat(name, breed, gender, color, age):
     cat = Cats(name=name, breed=breed, gender=gender, color=color, age=age)
     db.session.add(cat)
     db.session.commit()
 
-def getAllCats():
+
+def get_all_cats():
     return Cats.query.all()
-def getOneCat(id):
+
+
+def get_one_cat(id):
     return Cats.query.filter_by(id=id).all()
 
-def addCatPosition(date_add, date_change, cost, cats_id):
+
+def add_cat_position(date_add, date_change, cost, cats_id):
     cat = CatsPosition(date_add=date_add, date_change=date_change, cost=cost, cats_id=cats_id)
     db.session.add(cat)
     db.session.commit()
 
-def getAllCatsPosition():
+
+def get_all_cats_position():
     return CatsPosition.query.all()
-def getOneCatPosition(id):
+
+
+def get_one_cat_position(id):
     return CatsPosition.query.filter_by(id=id).all()
