@@ -5,21 +5,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(UserMixin):
-    def __init__(self, user_id, email, name, password):
+    def __init__(self, user_id, email, name, password, role):
         self.id = user_id
         self.email = email
         self.name = name
         self.password = password
-        self.role = 'user'
-
-
-class Admin(UserMixin):
-    def __init__(self, user_id, email, name, password):
-        self.id = user_id
-        self.email = email
-        self.name = name
-        self.password = generate_password_hash(password)
-        self.role = 'admin'
+        self.role = role
 
 
 def create_and_save_user(form):
@@ -27,7 +18,7 @@ def create_and_save_user(form):
     name = form.data['name']
     password = form.data['password']
     user_id = str(numeric_value_from_string(email))[0:17]
-    new_user = User(user_id, email, name, generate_password_hash(password))
+    new_user = User(user_id, email, name, generate_password_hash(password), 'user')
     add_user(new_user.id, new_user.email, new_user.name, new_user.password, new_user.role)
     return new_user
 
@@ -62,24 +53,6 @@ class UserModel(db.Model):
     role = db.Column(db.String(80), nullable=False)
 
 
-class AdminModel(db.Model):
-    __tablename__ = 'admins'
-    id = db.Column(db.String(80), primary_key=True)
-    email = db.Column(db.String(80), nullable=False)
-    name = db.Column(db.String(80), nullable=False)
-    password = db.Column(db.String(80), nullable=False)
-    role = db.Column(db.String(80), nullable=False)
-
-
-def get_admin(id):
-    user = AdminModel.query.filter_by(id=id).all()
-    print(len(user))
-    print(id)
-    if len(user) == 0:
-        return None
-    return Admin(user_id=user[0].id, email=user[0].email, name=user[0].name, password=user[0].password)
-
-
 def add_user(id, email, name, password, role):
     user = UserModel(id=id, email=email, name=name, password=password, role=role)
     db.session.add(user)
@@ -92,7 +65,7 @@ def get_user(id):
     print(id)
     if len(user) == 0:
         return None
-    return User(user_id=user[0].id, email=user[0].email, name=user[0].name, password=user[0].password)
+    return User(user_id=user[0].id, email=user[0].email, name=user[0].name, password=user[0].password, role=user[0].role)
 
 
 def numeric_value_from_string(s):
@@ -101,10 +74,10 @@ def numeric_value_from_string(s):
     hx = h.hexdigest()
     return int(hx, base=16)
 
-
-def create_admin():
-    id_admin = str(numeric_value_from_string('07vanek@gmail.com'))[0:17]
-    db_admin = AdminModel(id=id_admin, email='07vanek@gmail.com', name='admin', password=generate_password_hash('admin'), role='admin')
-    db.session.add(db_admin)
-    db.session.commit()
+# создание аккаунтов для администраторов
+# def create_admin():
+#     id_admin = str(numeric_value_from_string('07vanek@gmail.com'))[0:17]
+#     db_admin = UserModel(id=id_admin, email='07vanek@gmail.com', name='admin', password=generate_password_hash('admin'), role='admin')
+#     db.session.add(db_admin)
+#     db.session.commit()
 
