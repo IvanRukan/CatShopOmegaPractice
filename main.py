@@ -3,7 +3,7 @@ from forms import Form, CatAdd
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from UserModels import create_and_save_user, get_user_from_storage, input_check, db, get_user
-from CatModels import add_cat, add_cat_position, get_all_cats, Cats, CatsPosition
+from CatModels import add_cat, add_cat_position, get_all_cats
 from datetime import datetime
 import os
 app = Flask(__name__)
@@ -28,9 +28,6 @@ def load_user(user_id):
 
 @app.route('/', methods=["GET"])
 def main_page():
-    CatsPosition.__table__.drop(db.engine)
-    #Cats.query.filter(Cats.id == 4).delete()
-    #db.session.commit()
     try:
         if get_user_role() == 'user':
             return render_template('main.html', cats=[], auth=True)

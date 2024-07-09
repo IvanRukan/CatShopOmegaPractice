@@ -9,7 +9,7 @@ class Cats(db.Model):
     gender = db.Column(db.String(80), nullable=False)
     color = db.Column(db.String(80), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    cats_position = db.relationship('CatsPosition', back_populates='cats', cascade='save-update, merge, delete')
+    cats_position = db.relationship('CatsPosition', backref='cats', cascade='all, delete-orphan', lazy='dynamic')
 
 
 class CatsPosition(db.Model):
@@ -17,8 +17,7 @@ class CatsPosition(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     date = db.Column(db.Date, nullable=False)
     cost = db.Column(db.Integer, nullable=False)
-    cats_id = db.Column(db.Integer, db.ForeignKey('cats.id'), nullable=False, index=True)
-    cats = db.relationship('Cats', back_populates='cats_position')
+    cats_id = db.Column(db.Integer, db.ForeignKey('cats.id'), nullable=False)
 
 
 def add_cat(name, breed, gender, color, age):
