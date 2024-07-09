@@ -1,11 +1,9 @@
 from flask import Flask, render_template, redirect, request
 from flask_sqlalchemy import SQLAlchemy
-
 from forms import Form
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
-from UserModels import temporary_storage  # убрать и добавить бд методы
-from UserModels import create_and_save_user, get_user_from_storage, input_check
+from UserModels import create_and_save_user, get_user_from_storage, input_check, temporary_storage
 import os
 
 app = Flask(__name__)
@@ -16,6 +14,7 @@ csrf = CSRFProtect()
 csrf.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+db.create_all()
 
 
 @login_manager.user_loader
