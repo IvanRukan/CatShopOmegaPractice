@@ -61,8 +61,6 @@ def add_user(id, email, name, password, role):
 
 def get_user(id):
     user = UserModel.query.filter_by(id=id).all()
-    print(len(user))
-    print(id)
     if len(user) == 0:
         return None
     return User(user_id=user[0].id, email=user[0].email, name=user[0].name, password=user[0].password, role=user[0].role)
