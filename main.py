@@ -5,6 +5,7 @@ from flask_login import LoginManager, login_user, current_user, logout_user, log
 from UserModels import create_and_save_user, get_user_from_storage, input_check, db, get_user
 from CatModels import add_cat, add_cat_position, get_all_cats, get_one_cat, get_one_cat_position, remove_cat, \
     remove_position
+from Log import add_log, get_log_period_time
 from datetime import datetime
 import os
 app = Flask(__name__)
@@ -50,9 +51,9 @@ def register_page():
             user = get_user_from_storage(form)
             if user is None:
                 new_user = create_and_save_user(form)
-                print("New user created " + new_user.name)
+                add_log('add user', datetime.today(), 'guest')
             else:
-                print("User already exists " + user.name)
+                add_log('try add user', datetime.today(), 'guest')
         return redirect('/')
 
 
@@ -66,18 +67,19 @@ def login_page():
             user = input_check(form)
             if user is not None:
                 login_user(user)
-                print('logged in')
+                add_log('logged in', datetime.today(), user.role)
                 return redirect('/')
             else:
-                print("no such user")
+                add_log('try logged in', datetime.today(), 'guest')
         else:
-            print('login_failed')
+            add_log('logged failed', datetime.today(), 'guest')
         return redirect('/')
 
 
 @app.route('/logout', methods=["GET", "POST"])
 @login_required
 def logout_page():
+    add_log('logout', datetime.today(), get_user_role())
     logout_user()
     return redirect('/')
 
@@ -88,6 +90,7 @@ def add_page():
     form = CatAdd()
     if request.method == 'GET':
         if get_user_role() == 'user':
+            add_log('try add cat', datetime.today(), get_user_role())
             return 'у вас нет прав на создание котов йоу'
         return render_template('catAddPage.html', form=form)
     elif request.method == 'POST':
@@ -95,6 +98,7 @@ def add_page():
             add_cat(form.data['name'], form.data['breed'], form.data['gender'], form.data['color'], form.data['age'])
             cat_id = get_all_cats()[-1].id
             add_cat_position(datetime.today(), form.data['cost'], cat_id)
+            add_log('add cat and position', datetime.today(), get_user_role())
         return redirect('/')
 
 
@@ -105,6 +109,7 @@ def get_user_role():
 @app.route('/<int:id_cat>')
 def cat_view(id_cat):
     try:
+        add_log('view cat', datetime.today(), get_user_role())
         if get_user_role() == 'user':
             return render_template('catPage.html', cat=get_one_cat(id_cat), cat_pos=get_one_cat_position(id_cat), user=True)
         elif get_user_role() == 'admin':
@@ -118,10 +123,11 @@ def cat_delete():
     if request.method == 'GET':
         cat_id = request.args.get('id')
         if cat_id is None:
-            print('here')
+            add_log('try delete cat', datetime.today(), get_user_role())
             return redirect('/')
         remove_cat(cat_id)
         remove_position(cat_id)
+        add_log('delete cat and position', datetime.today(), get_user_role())
         return redirect('/')
 
 

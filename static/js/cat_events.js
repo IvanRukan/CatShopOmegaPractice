@@ -9,8 +9,9 @@ function choose_cat() {
         data: {
             'id': document.getElementById('cat_id').innerHTML,
         },
-        success: function (response) {
-
+        complete: function (response) {
+                    alert("You will now be redirected.");
+                    window.location.href = '/';
         }
     });
 }
