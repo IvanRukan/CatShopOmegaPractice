@@ -6,12 +6,21 @@
 </head>
 <body>
     <div>
+        <div id="cat_id">{{ cat.id }}</div>
        {{ cat.name }}
        {{ cat.breed }}
        {{ cat.color }}
        {{ cat.age }}
        {{ cat_pos.cost }}
-
+        {% if user or admin%}
+        <button id="choose_cat">Выбрать кота</button>
+        {% endif %}
+        {% if admin %}
+        <button id="edit_cat">Отредактировать кота</button>
+        {% endif %}
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/static/js/cat_events.js"></script>
+
 </body>
 </html>
