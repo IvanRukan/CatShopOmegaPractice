@@ -46,3 +46,14 @@ def get_all_cats_position():
 
 def get_one_cat_position(id):
     return CatsPosition.query.filter_by(id=id).all()[0]
+
+
+def remove_cat(id):
+    Cats.query.filter_by(id=id).delete()
+    db.session.commit()
+
+
+def remove_position(id):
+    CatsPosition.query.filter_by(cats_id=id).delete()
+    db.session.commit()
+
