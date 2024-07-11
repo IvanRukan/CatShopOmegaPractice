@@ -158,5 +158,15 @@ def cat_edit(id_cat):
             return redirect('/')
 
 
+@app.errorhandler(404)
+def not_found(e):
+    return 'Такой страницы не существует!'  # html страницы на эти ошибки стоит написать
+
+
+@app.errorhandler(401)
+def wrong_role(e):
+    return 'У вас нет прав на посещение данной страницы!'
+
+
 if __name__ == "__main__":
     app.run()
