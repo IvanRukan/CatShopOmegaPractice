@@ -116,7 +116,6 @@ def cat_view(id_cat):
         elif get_user_role() == 'admin':
             return render_template('catPage.html', cat=get_one_cat(id_cat), cat_pos=get_one_cat_position(id_cat), admin=True)
     except AttributeError:
-        add_log('view cat', datetime.today(), 'guest')
         return render_template('catPage.html', cat=get_one_cat(id_cat), cat_pos=get_one_cat_position(id_cat))
 
 
