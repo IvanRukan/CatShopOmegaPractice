@@ -1,10 +1,11 @@
+import json
 from flask import Flask, render_template, redirect, request
 from forms import Form, CatAdd
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from UserModels import create_and_save_user, get_user_from_storage, input_check, db, get_user
 from CatModels import add_cat, add_cat_position, get_all_cats, get_one_cat, get_one_cat_position, remove_cat, \
-    remove_position
+    remove_position, update_cat_and_pos
 from Log import add_log, get_log_period_time
 from datetime import datetime
 import os
@@ -92,7 +93,7 @@ def add_page():
         if get_user_role() == 'user':
             add_log('try add cat', datetime.today(), get_user_role())
             return 'у вас нет прав на создание котов йоу'
-        return render_template('catAddPage.html', form=form)
+        return render_template('catAddPage.html', form=form, cat=None, cat_pos=None)
     elif request.method == 'POST':
         if form.validate_on_submit():
             add_cat(form.data['name'], form.data['breed'], form.data['gender'], form.data['color'], form.data['age'])
@@ -129,6 +130,32 @@ def cat_delete():
         remove_position(cat_id)
         add_log('delete cat and position', datetime.today(), get_user_role())
         return redirect('/')
+
+
+@app.route('/edit_chosen_cat', methods=['GET'])
+@login_required
+def edit_endpoint():
+    cat_id = request.args.get('id')
+    if cat_id is None:
+        return redirect('/')
+    return json.dumps({'ID': cat_id})
+
+
+@app.route('/edit_chosen_cat/<int:id_cat>', methods=['GET', 'POST'])
+@login_required
+def cat_edit(id_cat):
+    form = CatAdd()
+    if request.method == 'GET':
+        if get_user_role() != 'admin':
+            return redirect('/')
+        cat = get_one_cat(id_cat)
+        cat_pos = get_one_cat_position(id_cat)
+        return render_template('catAddPage.html', form=form, cat=cat, cat_pos=cat_pos)
+    elif request.method == 'POST':
+        if form.validate_on_submit():
+            update_cat_and_pos(form.data['id'], form.data['name'], form.data['breed'], form.data['gender'],
+                               form.data['color'], form.data['age'], datetime.today(), form.data['cost'])
+            return redirect('/')
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ class Form(FlaskForm):
 
 
 class CatAdd(FlaskForm):
+    id = IntegerField()
     name = StringField('Введите имя кота:', validators=[DataRequired()])
     breed = StringField('Введите породу кота:', validators=[DataRequired()])
     gender = RadioField('Выберите пол кота:', choices=[('м', 'Мужской'), ('ж', 'Женский')], validators=[DataRequired()])
