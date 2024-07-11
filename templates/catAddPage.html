@@ -8,18 +8,19 @@
     <div>
         <form method="POST">
             {{ form.csrf_token }}
+            <div style="visibility: hidden">{{ form.id(value=cat.id) }}</div>
             {{ form.name.label }}
-            {{ form.name() }}
+            {{ form.name(value=cat.name) }}
             {{ form.breed.label }}
-            {{ form.breed() }}
+            {{ form.breed(value=cat.breed) }}
             {{ form.gender.label }}
-            {{ form.gender() }}
+            {{ form.gender(value=cat.gender) }}
             {{ form.color.label }}
-            {{ form.color() }}
+            {{ form.color(value=cat.color) }}
             {{ form.age.label }}
-            {{ form.age() }}
+            {{ form.age(value=cat.age) }}
             {{ form.cost.label }}
-            {{ form.cost() }}
+            {{ form.cost(value=cat_pos.cost) }}
             <input type="submit" value="Добавить кота">
         </form>
         
