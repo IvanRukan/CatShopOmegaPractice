@@ -31,7 +31,11 @@ def get_all_cats():
 
 
 def get_one_cat(id):
-    return Cats.query.filter_by(id=id).all()[0]
+    try:
+        cat = Cats.query.filter_by(id=id).all()[0]
+    except IndexError:
+        cat = 404
+    return cat
 
 
 def add_cat_position(date, cost, cats_id):
@@ -45,7 +49,11 @@ def get_all_cats_position():
 
 
 def get_one_cat_position(id):
-    return CatsPosition.query.filter_by(cats_id=id).all()[0]
+    try:
+        cat = CatsPosition.query.filter_by(cats_id=id).all()[0]
+    except IndexError:
+        cat = 404
+    return cat
 
 
 def remove_cat(id):

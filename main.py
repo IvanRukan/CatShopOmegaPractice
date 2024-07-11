@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, abort
 from forms import Form, CatAdd
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
@@ -109,14 +109,19 @@ def get_user_role():
 
 @app.route('/<int:id_cat>')
 def cat_view(id_cat):
+    cat = get_one_cat(id_cat)
+    cat_pos = get_one_cat_position(id_cat)
+    if cat == 404 or cat_pos == 404:
+        abort(404)
     try:
         add_log('view cat', datetime.today(), get_user_role())
+
         if get_user_role() == 'user':
-            return render_template('catPage.html', cat=get_one_cat(id_cat), cat_pos=get_one_cat_position(id_cat), user=True)
+            return render_template('catPage.html', cat=cat, cat_pos=cat_pos, user=True)
         elif get_user_role() == 'admin':
-            return render_template('catPage.html', cat=get_one_cat(id_cat), cat_pos=get_one_cat_position(id_cat), admin=True)
+            return render_template('catPage.html', cat=cat, cat_pos=cat_pos, admin=True)
     except AttributeError:
-        return render_template('catPage.html', cat=get_one_cat(id_cat), cat_pos=get_one_cat_position(id_cat))
+        return render_template('catPage.html', cat=cat, cat_pos=cat_pos)
 
 
 @app.route('/delete_chosen_cat', methods=['GET'])
@@ -156,6 +161,21 @@ def cat_edit(id_cat):
             update_cat_and_pos(form.data['id'], form.data['name'], form.data['breed'], form.data['gender'],
                                form.data['color'], form.data['age'], datetime.today(), form.data['cost'])
             return redirect('/')
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return 'Такой страницы не существует!'  # html страницы на эти ошибки стоит написать
+
+
+@app.errorhandler(401)
+def wrong_role(e):
+    return 'У вас нет прав на посещение данной страницы!'
+
+
+@app.errorhandler(500)
+def wrong_role(e):
+    return 'Проблема на стороне сервера!'
 
 
 if __name__ == "__main__":
