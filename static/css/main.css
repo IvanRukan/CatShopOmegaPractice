@@ -4,7 +4,7 @@
    }
 
    header, footer {
-    background-color: #68a871;
+    background-color: #681a11;
     color: white;
    }
 
@@ -47,8 +47,21 @@
     }
 .product-card .btn {
     margin-top: 1rem;
-    background-color: rgb(61, 187, 160);
-
+    background-color: #681a11;
+    border-color: #181a11;
+   }
+.product-card .btn:hover {
+    background-color: #181a11;
+    border-color: #181a11;
+   }
+.btn.btn-primary {
+    margin-top: 1rem;
+    background-color: #681a11;
+    border-color: #181a11;
+   }
+.btn.btn-primary:hover {
+    background-color: #181a11;
+    border-color: #181a11;
    }
 
 .card:hover {

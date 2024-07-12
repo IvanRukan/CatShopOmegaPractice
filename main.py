@@ -114,12 +114,12 @@ def cat_view(id_cat):
         abort(404)
     try:
         add_log('view cat', datetime.today(), get_user_role())
-
         if get_user_role() == 'user':
             return render_template('catPage.html', cat=cat, cat_pos=cat_pos, user=True)
         elif get_user_role() == 'admin':
             return render_template('catPage.html', cat=cat, cat_pos=cat_pos, admin=True)
     except AttributeError:
+        add_log('view cat', datetime.today(), 'guest')
         return render_template('catPage.html', cat=cat, cat_pos=cat_pos)
 
 
