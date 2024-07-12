@@ -24,7 +24,6 @@ with app.app_context():
     login_manager.init_app(app)
 
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return get_user(user_id)
@@ -158,7 +157,7 @@ def cat_edit(id_cat):
         return render_template('catAddPage.html', form=form, cat=cat, cat_pos=cat_pos)
     elif request.method == 'POST':
         if form.validate_on_submit():
-            update_cat_and_pos(form.data['id'], form.data['name'], form.data['breed'], form.data['gender'],
+            update_cat_and_pos(id_cat, form.data['name'], form.data['breed'], form.data['gender'],
                                form.data['color'], form.data['age'], datetime.today(), form.data['cost'])
             return redirect('/')
 
@@ -174,7 +173,7 @@ def wrong_role(e):
 
 
 @app.errorhandler(500)
-def wrong_role(e):
+def server_error(e):
     return 'Проблема на стороне сервера!'
 
 
