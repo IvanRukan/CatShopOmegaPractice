@@ -3,26 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Добавить кота</title>
+    <link rel="stylesheet" href="static/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div>
+<header class="text-white p-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-column flex-lg-row">
+            <h1 class="h3 mb-3 mb-lg-0">Добавление нового кота</h1>
+            <nav class="d-flex flex-column flex-lg-row align-items-center">
+            <a href="/" class="text-white mb-2 mb-lg-0 me-0 me-lg-3">Главная</a>
+            </nav>
+        </div>
+    </div>
+</header>
+<main class="py-5">
+    <div class="container">
         <form method="POST">
             {{ form.csrf_token }}
-            {{ form.name.label }}
-            {{ form.name(value=cat.name) }}
-            {{ form.breed.label }}
-            {{ form.breed(value=cat.breed) }}
-            {{ form.gender.label }}
-            {{ form.gender(value=cat.gender) }}
-            {{ form.color.label }}
-            {{ form.color(value=cat.color) }}
-            {{ form.age.label }}
-            {{ form.age(value=cat.age) }}
-            {{ form.cost.label }}
-            {{ form.cost(value=cat_pos.cost) }}
-            <input type="submit" value="Добавить кота">
+            <div class="mb-3">
+                {{ form.name.label }}
+                {{ form.name(value=cat.name) }}
+            </div>
+            <div class="mb-3">
+                {{ form.breed.label }}
+                {{ form.breed(value=cat.breed) }}
+            </div>
+            <div class="mb-3">
+                {{ form.gender.label }}
+                {{ form.gender(value=cat.gender) }}
+            </div>
+            <div class="mb-3">
+                {{ form.color.label }}
+                {{ form.color(value=cat.color) }}
+            </div>
+            <div class="mb-3">
+                {{ form.age.label }}
+                {{ form.age(value=cat.age) }}
+            </div>
+            <div class="mb-3">
+                {{ form.cost.label }}
+                {{ form.cost(value=cat_pos.cost) }}
+            </div>
+            <input type="submit" class="btn btn-primary" value="Добавить кота">
         </form>
-        
     </div>
+</main>
+<footer class="text-white p-2 text-center">
+    &copy; 2024 Котики
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="/static/js/cat_events.js"></script>
 </body>
 </html>
