@@ -8,7 +8,6 @@
     <div>
         <form method="POST">
             {{ form.csrf_token }}
-            <div style="visibility: hidden">{{ form.id(value=cat.id) }}</div>
             {{ form.name.label }}
             {{ form.name(value=cat.name) }}
             {{ form.breed.label }}
