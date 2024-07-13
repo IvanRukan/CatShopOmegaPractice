@@ -54,6 +54,7 @@ def register_page():
                 add_log('add user', datetime.today(), 'guest')
             else:
                 add_log('try add user', datetime.today(), 'guest')
+                return render_template('errorPage.html', error='Такая почта уже зарегистрирована!')
         return redirect('/')
 
 
@@ -93,7 +94,7 @@ def add_page():
         if get_user_role() == 'user':
             add_log('try add cat', datetime.today(), get_user_role())
             return 'у вас нет прав на создание котов йоу'
-        return render_template('catAddPage.html', form=form, cat=None, cat_pos=None)
+        return render_template('catAddPage.html', form=form, cat=None, cat_pos=None, title='Создание нового кота')
     elif request.method == 'POST':
         if form.validate_on_submit():
             add_cat(form.data['name'], form.data['breed'], form.data['gender'], form.data['color'], form.data['age'])
@@ -157,11 +158,12 @@ def cat_edit(id_cat):
         cat_pos = get_one_cat_position(id_cat)
         if cat == 404 or cat_pos == 404:
             abort(404)
-        return render_template('catAddPage.html', form=form, cat=cat, cat_pos=cat_pos)
+        return render_template('catAddPage.html', form=form, cat=cat, cat_pos=cat_pos, title='Изменение кота')
     elif request.method == 'POST':
         if form.validate_on_submit():
             update_cat_and_pos(id_cat, form.data['name'], form.data['breed'], form.data['gender'],
                                form.data['color'], form.data['age'], datetime.today(), form.data['cost'])
+            add_log('edit cat or position', datetime.today(), get_user_role())
             return redirect('/')
 
 
