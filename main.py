@@ -155,6 +155,8 @@ def cat_edit(id_cat):
             return redirect('/')
         cat = get_one_cat(id_cat)
         cat_pos = get_one_cat_position(id_cat)
+        if cat == 404 or cat_pos == 404:
+            abort(404)
         return render_template('catAddPage.html', form=form, cat=cat, cat_pos=cat_pos)
     elif request.method == 'POST':
         if form.validate_on_submit():
