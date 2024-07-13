@@ -1,6 +1,5 @@
 import pytest
 from main import app
-from UserModels import db
 
 
 @pytest.fixture()
