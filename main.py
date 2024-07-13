@@ -71,6 +71,7 @@ def login_page():
                 return redirect('/')
             else:
                 add_log('try logged in', datetime.today(), 'guest')
+                abort(401)
         else:
             add_log('logged failed', datetime.today(), 'guest')
         return redirect('/')

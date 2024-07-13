@@ -78,3 +78,10 @@ def update_cat_and_pos(id, name, breed, gender, color, age, date, cost):
     cat_pos.cost = cost
     db.session.commit()
 
+
+def get_cat_for_tests(name):
+    try:
+        return Cats.query.filter_by(name=name).all()[0]
+    except IndexError:
+        return None
+
