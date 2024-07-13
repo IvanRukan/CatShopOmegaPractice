@@ -93,6 +93,7 @@ def add_page():
     if request.method == 'GET':
         if get_user_role() == 'user':
             add_log('try add cat', datetime.today(), get_user_role())
+            abort(401)
             return 'у вас нет прав на создание котов йоу'
         return render_template('catAddPage.html', form=form, cat=None, cat_pos=None, title='Создание нового кота')
     elif request.method == 'POST':
