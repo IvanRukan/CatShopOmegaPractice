@@ -165,17 +165,17 @@ def cat_edit(id_cat):
 
 @app.errorhandler(404)
 def not_found(e):
-    return 'Такой страницы не существует!'  # html страницы на эти ошибки стоит написать
+    return render_template('errorPage.html', error='Такой страницы не существует!')  # html страницы на эти ошибки стоит написать
 
 
 @app.errorhandler(401)
 def wrong_role(e):
-    return 'У вас нет прав на посещение данной страницы!'
+    return render_template('errorPage.html', error='У вас нет прав на посещение данной страницы!')
 
 
 @app.errorhandler(500)
 def server_error(e):
-    return 'Проблема на стороне сервера!'
+    return render_template('errorPage.html', error='Проблема на стороне сервера!')
 
 
 if __name__ == "__main__":
