@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template, redirect, request, abort
+from flask import Flask, render_template, redirect, request, abort, flash, url_for
 from forms import Form, CatAdd
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
@@ -52,10 +52,12 @@ def register_page():
             if user is None:
                 new_user = create_and_save_user(form)
                 add_log('add user', datetime.today(), 'guest')
+                flash("Успешно зарегистрированы!")
             else:
                 add_log('try add user', datetime.today(), 'guest')
-                return render_template('errorPage.html', error='Такая почта уже зарегистрирована!')
-        return redirect('/')
+                flash("Такая почта уже зарегистрирована!")
+                return redirect(url_for("register_page"))
+        return redirect(url_for("register_page"))
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -93,7 +95,7 @@ def add_page():
     if request.method == 'GET':
         if get_user_role() == 'user':
             add_log('try add cat', datetime.today(), get_user_role())
-            return 'у вас нет прав на создание котов йоу'
+            abort(401)
         return render_template('catAddPage.html', form=form, cat=None, cat_pos=None, title='Создание нового кота')
     elif request.method == 'POST':
         if form.validate_on_submit():
@@ -174,7 +176,7 @@ def not_found(e):
 
 @app.errorhandler(401)
 def wrong_role(e):
-    return render_template('errorPage.html', error='У вас нет прав на посещение данной страницы или введен неправильный логин или пароль!')
+    return render_template('errorPage.html', error='У вас нет прав на посещение данной страницы!')
 
 
 @app.errorhandler(500)

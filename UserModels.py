@@ -36,9 +36,9 @@ def input_check(form):
     try:
         if check_password_hash(found_user.password, form.data['password']) and form.data['name'] == found_user.name:
             return found_user
-        return             # "Неверное имя пользователя или пароль!"
+        return  # "Неверное имя пользователя или пароль!"
     except AttributeError:
-        return             # "Такого пользователя не существует!"
+        return  # "Такого пользователя не существует!"
 
 
 db = SQLAlchemy()
@@ -63,7 +63,8 @@ def get_user(id):
     user = UserModel.query.filter_by(id=id).all()
     if len(user) == 0:
         return None
-    return User(user_id=user[0].id, email=user[0].email, name=user[0].name, password=user[0].password, role=user[0].role)
+    return User(user_id=user[0].id, email=user[0].email, name=user[0].name, password=user[0].password,
+                role=user[0].role)
 
 
 def numeric_value_from_string(s):
@@ -71,6 +72,7 @@ def numeric_value_from_string(s):
     h.update(s.encode())
     hx = h.hexdigest()
     return int(hx, base=16)
+
 
 # создание аккаунтов для администраторов
 # def create_admin():

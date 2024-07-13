@@ -10,7 +10,6 @@ function choose_cat() {
             'id': document.getElementById('cat_id').innerHTML,
         },
         complete: function (response) {
-                    alert("You will now be redirected.");
                     window.location.href = '/';
         }
     });
