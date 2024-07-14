@@ -25,7 +25,6 @@
 
 
 Главная страница приложения:
-<br/>
 ![image](https://github.com/user-attachments/assets/1fec21a5-7cd0-4460-bc04-f34e4dd0673c)
 \
 Вход в аккаунт администратора:
@@ -55,7 +54,7 @@
 Пример посещения пользователем несуществующей страницы (404):
 \
 ![image](https://github.com/user-attachments/assets/9b577057-5fec-4381-bfd4-6d0646e82431)
-\
+
 
 
 
