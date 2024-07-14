@@ -25,7 +25,7 @@
 
 
 Главная страница приложения:
-\
+<br/>
 ![image](https://github.com/user-attachments/assets/1fec21a5-7cd0-4460-bc04-f34e4dd0673c)
 \
 Вход в аккаунт администратора:
